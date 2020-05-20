@@ -8,11 +8,11 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QApplication
 import random
+from Qt.Notification.Notification import Notification
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
     startNotification_Signal = pyqtSignal(Notification)
-    endNotification_Signal = pyqtSignal(Notification)
 
     def __init__(self, parent=None):
         super(MAIN_UI, self).__init__(parent)
@@ -42,12 +42,11 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         y = random.randrange(100, 800)
         notification.moveTo(x, y)
 
-        self.startNotification_Signal.connect(self.showNotification)
-        self.endNotification_Signal.connect(self.hideNotification)
+        self.startNotification_Signal.connect(self._showNotification)
 
         self.startNotification_Signal.emit(notification)
         time.sleep(notification.getTimeout())
-        self.endNotification_Signal.emit(notification)
+        notification.hide()
 
     def _showSuccessNotification(self, msg):
         """ shows a Information Notification """
@@ -60,16 +59,15 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         y = random.randrange(100, 800)
         notification.moveTo(x, y)
 
-        self.startNotification_Signal.connect(self.showNotification)
-        self.endNotification_Signal.connect(self.hideNotification)
+        self.startNotification_Signal.connect(self._showNotification)
 
         self.startNotification_Signal.emit(notification)
         time.sleep(notification.getTimeout())
-        self.endNotification_Signal.emit(notification)
+        notification.hide()
 
     def showInformation(self, msg):
         """ shows a notification within a thread """
-        t = threading.Thread(target=self.showInformationNotification, args=[msg])
+        t = threading.Thread(target=self._showInformationNotification, args=[msg])
         t.daemon = True
         t.start()
 
@@ -83,10 +81,13 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         texte = ["Vor langer langer Zeit lebte ein Tux in Österreich und hatte keine Windows daheim",
                  "Quod erat demonsdrandum",
                  "Einer der nichts weiß und nicht weiß das er nichts weiß, weiß weniger als einer der weiß dass er nichts weiß"]
-        for i in range(0, 3):
-            print("%s %s" % (i, texte[i]))
-            """ start showing Notification within a Thread for non blocking """
-            self.showInformation(texte[i])
+        """ start showing Notification within a Thread for non blocking """
+        self.showInformation(texte[0])
+        time.sleep(1)
+        self.showSuccess(texte[1])
+        time.sleep(1)
+        self.showInformation(texte[2])
+        time.sleep(1)
 
 
 def main():
