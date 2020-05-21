@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 from pathlib import Path
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QPixmap
+import time
+import threading
+import random
+from enum import Enum
 
 
-class Notification(QtWidgets.QDialog):
+class Notification_Core(QtWidgets.QDialog):
     """ Display a Notification for some reasons """
     def __init__(self, parent=None):
-        super(Notification, self).__init__(parent)
+        super(Notification_Core, self).__init__(parent)
         self.initUI()
 
     def initUI(self):
@@ -43,7 +47,7 @@ class Notification(QtWidgets.QDialog):
 
     def _onAbbrechen(self):
         """ click event, hide it"""
-        self.hide()
+        self.close()
 
     def setHeader(self, txt):
         """ set the Header of the notification """
@@ -63,3 +67,79 @@ class Notification(QtWidgets.QDialog):
     def setIcon(self, icon):
         iconfile = self.rootDir.joinpath(icon).as_posix()
         self.ui.icon.setPixmap(QPixmap(iconfile))
+
+    def setBarColor(self, color):
+        self.ui.colorbar.setStyleSheet("background-color: %s;" % color)
+
+
+class Notification_Type(Enum):
+    Information = 1
+    Success = 2
+    Error = 3
+    Warning = 4
+
+
+class Notification(QObject):
+    startNotification_Signal = pyqtSignal(Notification_Core)
+
+    def __init__(self, demo=False):
+        super(Notification, self).__init__()
+        # random position on screen just for demonstration
+        self.demo = demo
+
+    def _showNotification(self, n):
+        """ shows the notification n """
+        n.show()
+
+    def _createNotification(self, msg, typ):
+        """ shows a Information Notification """
+        n = Notification_Core()
+        if typ == Notification_Type.Information:
+            n.setHeader("Information")
+            n.setIcon('pixmaps/notice.png')
+            n.setBarColor("#2C54AB")
+        elif typ == Notification_Type.Success:
+            n.setHeader("Done")
+            n.setIcon('pixmaps/success.png')
+            n.setBarColor("#009961")
+        elif typ == Notification_Type.Error:
+            n.setHeader("Error")
+            n.setIcon('pixmaps/error.png')
+            n.setBarColor("#CC0033")
+        elif typ == Notification_Type.Warning:
+            n.setHeader("Warning")
+            n.setIcon('pixmaps/warning.png')
+            n.setBarColor("#E23E0A")
+
+        n.setMessage(msg)
+
+        if self.demo:
+            x = random.randrange(100, 800)
+            y = random.randrange(100, 800)
+            n.moveTo(x, y)
+
+        self.startNotification_Signal.connect(self._showNotification)
+        self.startNotification_Signal.emit(n)
+        time.sleep(n.getTimeout())
+        n.hide()
+
+    def showInformation(self, msg):
+        t = threading.Thread(target=self._createNotification, args=[msg, Notification_Type.Information])
+        t.daemon = True
+        t.start()
+
+    def showSuccess(self, msg):
+        t = threading.Thread(target=self._createNotification, args=[msg, Notification_Type.Success])
+        t.daemon = True
+        t.start()
+
+    def showError(self, msg):
+        t = threading.Thread(target=self._createNotification, args=[msg, Notification_Type.Error])
+        t.daemon = True
+        t.start()
+
+    def showWarning(self, msg):
+        t = threading.Thread(target=self._createNotification, args=[msg, Notification_Type.Warning])
+        t.daemon = True
+        t.start()
+
