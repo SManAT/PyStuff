@@ -14,6 +14,6 @@ self.notification.showSuccess("My Message")
 self.notification.showWarning("My Message")
 self.notification.showError("My Message")
 ```
-For getting an idea
+To get an idea how it looks like
 ![Screenshot](./img/notifyshot.jpg)
 This stuff is provided as it is, glhf!
