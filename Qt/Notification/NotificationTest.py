@@ -4,7 +4,10 @@ from pathlib import Path
 import PyQt5
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
-from Notification import Notification, Notification_Core, Notification_Type
+from Qt.Notification.Notification import Notification_Core, Notification_Type,\
+    Notification
+from PyQt5.Qt import QThread
+import threading
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
@@ -22,11 +25,27 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
                  "Quod erat demonsdrandum",
                  "Einer der nichts weiß und nicht weiß das er nichts weiß, weiß weniger als einer der weiß dass er nichts weiß"]
         """ start showing Notification within a Thread for non blocking """
+        
+        """
+        t = QThread()
+        notification.moveToThread(t)
+        t.started.connect(worker.run)
+        t.start()
+        """
+        
         n = Notification_Core()
         n.setMessage(texte[0])
         n.setType(Notification_Type.Information)
         notification = Notification(n)
-        notification.start()
+        #notification.run()
+        
+        t = threading.Thread(target=notification)
+        t.daemon = True
+        t.start()
+        
+                
+        
+        
 """
         n = Notification_Core()
         n.setMessage(texte[1])
