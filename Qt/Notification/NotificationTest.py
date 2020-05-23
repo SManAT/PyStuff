@@ -3,13 +3,11 @@ import sys
 from pathlib import Path
 import PyQt5
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QApplication
-from Qt.Notification.Notification import Notification
+from Notification import Notification, Notification_Core, Notification_Type
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
-    startNotification_Signal = pyqtSignal(Notification)
 
     def __init__(self, parent=None):
         super(MAIN_UI, self).__init__(parent)
@@ -17,9 +15,6 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         uifile = self.rootDir.joinpath('main.ui')
         self.ui = uic.loadUi(uifile)        # load UI
         self.ui.btn1.clicked.connect(lambda: self.startNotificationTest())
-        # Demonstration
-        self.notification = Notification(True)
-
         self.ui.show()
 
     def startNotificationTest(self):
@@ -27,18 +22,36 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
                  "Quod erat demonsdrandum",
                  "Einer der nichts weiß und nicht weiß das er nichts weiß, weiß weniger als einer der weiß dass er nichts weiß"]
         """ start showing Notification within a Thread for non blocking """
-        self.notification.showInformation(texte[0])
-        self.notification.showSuccess(texte[1])
-        self.notification.showWarning(texte[2])
-        self.notification.showError(texte[0])
+        n = Notification_Core()
+        n.setMessage(texte[0])
+        n.setType(Notification_Type.Information)
+        notification = Notification(n)
+        notification.start()
+"""
+        n = Notification_Core()
+        n.setMessage(texte[1])
+        n.setType(Notification_Type.Error)
+        notification = Notification(n)
+        notification.start()
 
+        n = Notification_Core()
+        n.setMessage(texte[2])
+        n.setType(Notification_Type.Success)
+        notification = Notification(n)
+        notification.start()
+
+        n = Notification_Core()
+        n.setMessage(texte[3])
+        n.setType(Notification_Type.Warning)
+        notification = Notification(n)
+        notification.start()
+"""
 
 def main():
     app = QApplication(sys.argv)
 
     # show main Window
     mainUI = MAIN_UI()  #noqa
-
     app.exec_()
 
 
