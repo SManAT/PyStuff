@@ -18,4 +18,6 @@ notification.showSuccess("MyMessage")
 ```
 To get an idea how it looks like
 ![Screenshot](./img/notifyshot.jpg)
-This stuff is provided as it is, glhf!
+
+
+This stuff is provided as it is, gl & hf!
