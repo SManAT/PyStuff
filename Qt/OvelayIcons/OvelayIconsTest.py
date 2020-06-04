@@ -8,6 +8,7 @@ import PyQt5
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
 from Qt.OvelayIcons.OpenCVLib import OpenCVLib
+from Qt.OvelayIcons.IconStack import IconStack, Icons
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
@@ -17,13 +18,25 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         self.rootDir = Path(__file__).parent
         uifile = self.rootDir.joinpath('main.ui')
         self.ui = uic.loadUi(uifile, self)        # load UI inside QMainWindow
+        self.ui.btn_add.clicked.connect(lambda: self.addIcon())
+        self.ui.btn_remove.clicked.connect(lambda: self.removeIcon())
 
         self.cv = OpenCVLib()
         self.CVTest(self.ui.image.pixmap())
 
+        # IconStack
+        self.stack = IconStack(self.ui.image, "test/")
+
     def closeEvent(self, event):
         ''' window tries to close '''
         # event.ignore()
+        pass
+
+    def addIcon(self):
+        self.stack.add(Icons.FILE_OK)
+        pass
+
+    def removeIcon(self):
         pass
 
     def CVTest(self, pixmap):
@@ -45,7 +58,7 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
 
         # TEST 2 ------------------------------------------------
         # Icon Test
-        icon = self.cv.readPNG("test/ok.png")
+        icon = self.cv.readPNG("test/file_ok.png")
         icon = self.cv.resizeTo(icon, 64, 64)
         pixmap = self.cv.overlayIcon(self.ui.image.pixmap(), icon)
         # write back

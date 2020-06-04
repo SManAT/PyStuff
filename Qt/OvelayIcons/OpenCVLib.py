@@ -98,6 +98,14 @@ class OpenCVLib(object):
                     print("Pixeldata mismatch, e.g. RGB and RGBA")
         return src
 
+    def filter(self, cvImg):
+        """
+        see https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_filtering/py_filtering.html
+        """
+        # return cv2.medianBlur(cvImg, 5)
+        # tuppel positiv an odd!
+        return cv2.GaussianBlur(cvImg, (3, 3), 0)
+
     def overlayIcon(self, pixmap, icon, x=0, y=0):
         """
         place icon onto pixmap
@@ -106,6 +114,8 @@ class OpenCVLib(object):
         :param x,y:  position where the image to be
         :return: Resultant QPixmap
         """
+        # Glätten
+        icon = self.filter(icon)
         Qimg = pixmap.toImage()
         img = self.QImage2MAT(Qimg)
         output = img.copy()
