@@ -6,7 +6,6 @@ import cv2
 import numpy as np
 from PyQt5.Qt import QImage, qRgb
 from PyQt5 import QtGui
-from test import test_imghdr
 
 
 class OpenCVLib(object):
@@ -71,3 +70,46 @@ class OpenCVLib(object):
         fac_h = height / h
         # print("%s x %s" % (fac_w * w, fac_h * h))
         return cv2.resize(img, (int(fac_w * w), int(fac_h * h)), interpolation=cv2.INTER_CUBIC)
+
+    def transparentOverlay(self, src, overlay, x, y):
+        """
+        Place a overlay PNG Image onto background on position x, y
+        :param src: Input Color Background Image
+        :param overlay: transparent Image
+        :param pos:  position where the image to be
+        :return: Resultant Image
+        """
+        overlay = cv2.cvtColor(overlay, cv2.COLOR_RGB2BGRA)
+        src = cv2.cvtColor(src, cv2.COLOR_RGB2BGRA)
+        # Size of foreground
+        h, w, _ = overlay.shape
+        # Size of background Image
+        rows, cols, _ = src.shape
+        # loop over all pixels and apply alpha
+        for i in range(h):
+            for j in range(w):
+                if (x + i) >= rows or (y + j) >= cols:
+                    continue
+                # read the alpha channel
+                alpha = float(overlay[i][j][3] / 255.0)
+                try:
+                    src[x + i][y + j] = alpha * overlay[i][j] + (1 - alpha) * src[x + i][y + j]
+                except ValueError:
+                    print("Pixeldata mismatch, e.g. RGB and RGBA")
+        return src
+
+    def overlayIcon(self, pixmap, icon, x=0, y=0):
+        """
+        place icon onto pixmap
+        :param pixmap: an QPixmap Image
+        :param icon: smaller Image
+        :param x,y:  position where the image to be
+        :return: Resultant QPixmap
+        """
+        Qimg = pixmap.toImage()
+        img = self.QImage2MAT(Qimg)
+        output = img.copy()
+
+        output = self.transparentOverlay(output, icon, x, y)
+        output = cv2.cvtColor(output, cv2.COLOR_BGRA2RGB)
+        return self.MAT2QPixmap(output)
