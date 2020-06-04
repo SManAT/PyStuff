@@ -19,5 +19,17 @@ notification.showSuccess("MyMessage")
 To get an idea how it looks like
 ![Screenshot](./img/notifyshot.jpg)
 
+# QT/OverlayIcons
+Place an overlay Icon (*.png) for a QPixmap at a specific position.
+You receive also an QPixmap that u can place somewhere in your QT App.
+What u nedd is OpenCV > `sudo pip install opencv-python`.
+
+## How to use it
+```python3
+soon
+```
+To get an idea how it looks like
+![Screenshot](./img/overlay.jpg)
+
 
 This stuff is provided as it is, gl & hf!
