@@ -8,7 +8,7 @@ import PyQt5
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
 from Qt.OvelayIcons.OpenCVLib import OpenCVLib
-from Qt.OvelayIcons.IconStack import IconStack, Icons
+from Qt.OvelayIcons.IconStack import IconStack
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
@@ -33,8 +33,10 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         pass
 
     def addIcon(self):
-        self.stack.add(Icons.FILE_OK)
-        pass
+        self.stack.setExamIconON()
+        self.stack.setExamIconOFF()
+        self.stack.setFileReceivedOK()
+        self.stack.setFileReceivedERROR()
 
     def removeIcon(self):
         pass
@@ -60,7 +62,7 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         # Icon Test
         icon = self.cv.readPNG("test/file_ok.png")
         icon = self.cv.resizeTo(icon, 64, 64)
-        pixmap = self.cv.overlayIcon(self.ui.image.pixmap(), icon)
+        pixmap = self.cv.overlayIcon(self.ui.image.pixmap(), icon, 100, 10)
         # write back
         self.ui.image.setPixmap(pixmap)
 

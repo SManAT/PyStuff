@@ -79,8 +79,11 @@ class OpenCVLib(object):
         :param pos:  position where the image to be
         :return: Resultant Image
         """
-        overlay = cv2.cvtColor(overlay, cv2.COLOR_RGB2BGRA)
+        overlay = cv2.cvtColor(overlay, cv2.COLOR_RGB2BGRA)  # important
         src = cv2.cvtColor(src, cv2.COLOR_RGB2BGRA)
+        # Convert overlay to it to 8-bit
+        self.map_uint16_to_uint8(overlay)  # important
+
         # Size of foreground
         h, w, _ = overlay.shape
         # Size of background Image
@@ -120,6 +123,39 @@ class OpenCVLib(object):
         img = self.QImage2MAT(Qimg)
         output = img.copy()
 
-        output = self.transparentOverlay(output, icon, x, y)
+        output = self.transparentOverlay(output, icon, y, x)
         output = cv2.cvtColor(output, cv2.COLOR_BGRA2RGB)
         return self.MAT2QPixmap(output)
+
+    def map_uint16_to_uint8(self, img, lower_bound=None, upper_bound=None):
+        '''
+        Map a 16-bit image trough a lookup table to convert it to 8-bit.
+        :param img: numpy.ndarray[np.uint16] image that should be mapped
+        :param lower_bound: int, optional
+            lower bound of the range that should be mapped to ``[0, 255]``,
+            value must be in the range ``[0, 65535]`` and smaller than `upper_bound`
+            (defaults to ``numpy.min(img)``)
+        :param upper_bound: int, optional
+           upper bound of the range that should be mapped to ``[0, 255]``,
+           value must be in the range ``[0, 65535]`` and larger than `lower_bound`
+           (defaults to ``numpy.max(img)``)
+        '''
+        if lower_bound is not None and not(0 <= lower_bound < 2**16):
+            raise ValueError(
+                '"lower_bound" must be in the range [0, 65535]')
+        if upper_bound is not None and not(0 <= upper_bound < 2**16):
+            raise ValueError(
+                '"upper_bound" must be in the range [0, 65535]')
+        if lower_bound is None:
+            lower_bound = np.min(img)
+        if upper_bound is None:
+            upper_bound = np.max(img)
+        if lower_bound >= upper_bound:
+            raise ValueError(
+                '"lower_bound" must be smaller than "upper_bound"')
+        lut = np.concatenate([
+            np.zeros(lower_bound, dtype=np.uint16),
+            np.linspace(0, 255, upper_bound - lower_bound).astype(np.uint16),
+            np.ones(2**16 - upper_bound, dtype=np.uint16) * 255
+        ])
+        return lut[img].astype(np.uint8)

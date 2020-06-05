@@ -38,6 +38,8 @@ class IconStack(object):
         self.margin = margin
 
         self.cv = OpenCVLib()
+        # store the original pixmap
+        self._original = self.widget.pixmap().copy()
 
     def loadIcons(self):
         """ load all Icons from file to preload stack"""
@@ -48,8 +50,8 @@ class IconStack(object):
 
     def _repaint(self):
         """ draw all Overlay Icons with OpenCV """
-        pixmap = self.widget.pixmap()
-        x = pixmap.width() - self.margin
+        pixmap = self._original
+        x = pixmap.width() - 2 * self.margin
         y = self.margin
 
         for i in self.icons:
@@ -72,41 +74,24 @@ class IconStack(object):
         for i in self._loaded_icons:
             # search the right one
             if i.getName() == icon.value:
-                print("Add %s" % icon.value)
                 # make a full copy of that
                 icon = copy.deepcopy(i)
                 self.icons.append(icon)
                 break
         self._repaint()
 
-
-
-
-
-    
-    
-    
-    
-    
-
     def setExamIconON(self):
         """ set all Status Exam Icons to on """
-        self.removeStatusIcon("pixmaps/exam_off.png")
-        self.setStatusIcon("pixmaps/exam_on.png")
+        self.add(Icons.EXAM_ON)
 
     def setExamIconOFF(self):
         """ set all Status Exam Icons to off """
-        self.removeStatusIcon("pixmaps/exam_on.png")
-        self.setStatusIcon("pixmaps/exam_off.png")
+        self.add(Icons.EXAM_OFF)
 
     def setFileReceivedOK(self):
         """ set all File received Icon """
-        self.removeStatusIcon("pixmaps/file_cancel.png")
-        self.removeStatusIcon("pixmaps/file_ok.png")
-        self.setStatusIcon("pixmaps/file_ok.png")
+        self.add(Icons.FILE_OK)
 
     def setFileReceivedERROR(self):
         """ set all File NOT Received icon """
-        self.removeStatusIcon("pixmaps/file_ok.png")
-        self.removeStatusIcon("pixmaps/file_cancel.png")
-        self.setStatusIcon("pixmaps/file_cancel.png")
+        self.add(Icons.FILE_ERROR)
