@@ -29,7 +29,9 @@ class Notification_Core(QtWidgets.QDialog):
         self.rootDir = Path(__file__).parent
         uifile = self.rootDir.joinpath('Notification.ui')
         self.ui = uic.loadUi(uifile)        # load UI
-        self.ui.setWindowFlags(Qt.FramelessWindowHint)
+        # this will hide the app from task bar
+        self.ui.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.ui.setAttribute(QtCore.Qt.WA_ShowWithoutActivating)
 
         # position right middle of screen
         self.moveToDefaultPosition()
