@@ -35,10 +35,11 @@ def main():
 
     splash = SplashScreen()
 
-    for i in range(1, 11):
+    for i in range(1, 101):
         splash.progressBar.setValue(i)
         t = time.time()
         while time.time() < t + 0.1:
+            # mainthread must process Events
             app.processEvents()
 
     # Simulate something that takes time
