@@ -1,59 +1,94 @@
-from PyQt5.Qt import QDialog, QTextBrowser, QLineEdit, QVBoxLayout, QApplication,\
-    QPixmap, QSplashScreen, Qt, QProgressBar
-import time
+import sys
+from threading import Thread
+from PyQt5 import QtWidgets, QtCore
 
 
-class Form(QDialog):
-    """ Just a simple dialog with a couple of widgets
-    """
+class Ui_Dialog(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        self.pushButton = QtWidgets.QPushButton(Dialog)
+        self.pushButton.setGeometry(QtCore.QRect(100, 100, 100, 50))
+        self.pushButton.setObjectName("pushButton")
+
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "UI_Dialog"))
+        self.pushButton.setText(_translate("Dialog", "OK"))
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, mainWindow):
+        mainWindow.setObjectName("mainWindow")
+        self.pushButton = QtWidgets.QPushButton(mainWindow)
+        self.pushButton.setGeometry(QtCore.QRect(30, 20, 100, 60))
+        self.pushButton.setObjectName("pushButton")
+
+        self.retranslateUi(mainWindow)
+        QtCore.QMetaObject.connectSlotsByName(mainWindow)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("mainWindow", "Test"))
+        self.pushButton.setText(_translate("mainWindow", "Push Me!"))
+
+
+class TestDialog(QtWidgets.QDialog):
+    signal = QtCore.pyqtSignal()
+
     def __init__(self, parent=None):
-        super(Form, self).__init__(parent)
-        self.browser = QTextBrowser()
-        self.setWindowTitle('Just a dialog')
-        self.lineedit = QLineEdit("Write something and press Enter")
-        self.lineedit.selectAll()
-        layout = QVBoxLayout()
-        layout.addWidget(self.browser)
-        layout.addWidget(self.lineedit)
-        self.setLayout(layout)
-        self.lineedit.setFocus()
-        self.connect(self.lineedit, SIGNAL("returnPressed()"),
-                     self.update_ui)
+        super(TestDialog, self).__init__(parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        # This message simply needs to go away
+        self.ui.pushButton.clicked.connect(self.close)
 
-    def update_ui(self):
-        self.browser.append(self.lineedit.text())
+    def show_message(self):
+        # Use this to display the pop-up so the text can be altered
+        super(TestDialog, self).exec_()
+        self.signal.emit()
 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
+class Main(QtWidgets.QMainWindow):
+    signal = QtCore.pyqtSignal()
 
-    # Create and display the splash screen
-    splash_pix = QPixmap('img/bee2.jpg')
+    def __init__(self):
+        super(Main, self).__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
-    splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
-    splash.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-    splash.setEnabled(False)
-    # splash = QSplashScreen(splash_pix)
-    # adding progress bar
-    progressBar = QProgressBar(splash)
-    progressBar.setMaximum(10)
-    progressBar.setGeometry(0, splash_pix.height() - 50, splash_pix.width(), 20)
+        self.dialog = TestDialog()
+        self.dialog_done = False
 
-    # splash.setMask(splash_pix.mask())
+        self.ui.pushButton.clicked.connect(self.start_thread)
 
-    splash.show()
-    splash.showMessage("<h1><font color='green'>Welcome BeeMan!</font></h1>", Qt.AlignTop | Qt.AlignCenter, Qt.black)
-    
-    for i in range(1, 11):
-        progressBar.setValue(i)
-        t = time.time()
-        while time.time() < t + 0.1:
-           app.processEvents()
+    def complete_dialog(self):
+        self.dialog_done = True
 
-    # Simulate something that takes time
-    time.sleep(1)
+    def wait_for_dialog(self):
+        while not self.dialog_done:
+            pass
+        self.dialog_done = False
 
-    form = Form()
-    form.show()
-    splash.finish(form)
+    def start_thread(self):
+        t = Thread(target=self.show_dialog)
+        t.daemon = True
+        t.start()
+
+    def show_dialog(self):
+        # Do lots of background stuff here
+        self.signal.emit()
+        # Wait for the dialog to get closed
+        self.wait_for_dialog()
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = Main()
+    window.show()
+    dialog = TestDialog()
+    window.signal.connect(dialog.show_message)
+    dialog.signal.connect(window.complete_dialog)
     sys.exit(app.exec_())

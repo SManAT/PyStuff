@@ -10,6 +10,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
 from PyQt5.Qt import QCoreApplication
 from Qt.Splashscreen.SplashScreen import SplashScreen
+from threading import Thread
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
@@ -20,6 +21,13 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         uifile = self.rootDir.joinpath('main.ui')
         self.ui = uic.loadUi(uifile, self)        # load UI inside QMainWindow
         self.ui.close.clicked.connect(lambda: self.close())
+        self.progress = 0;
+
+        
+    
+
+    def updateProgressBar(self):
+        self.ui.progressBar.setValue(self.progress)
 
     def close(self):
         QCoreApplication.quit()
@@ -34,9 +42,13 @@ def main():
     app = QApplication(sys.argv)
 
     splash = SplashScreen()
-
+    splash.show()
+# show main Window
+    gui = MAIN_UI()  #noqa
+    
+    gui.show()
+    
     for i in range(1, 101):
-        splash.progressBar.setValue(i)
         t = time.time()
         while time.time() < t + 0.1:
             # mainthread must process Events
@@ -45,11 +57,8 @@ def main():
     # Simulate something that takes time
     time.sleep(1)
 
-    # show main Window
-    gui = MAIN_UI()  #noqa
-    gui.show()
+    
 
-    splash.finish(gui)
     app.exec_()
 
 
