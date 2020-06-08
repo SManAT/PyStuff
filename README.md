@@ -1,6 +1,11 @@
 # PyStuff
 some things markable for me to remember
 
+## what you nedd
+`pip install python-qt5 pyqt5-tools opencv-python`
+that is usefull too
+`pip install pipupgrade`
+
 # QT/Notification
 This is a QtDialog that simulates a notification on the screen.
 
