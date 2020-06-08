@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2019 Stefan Hagmann
-
 import sys
 import time
 from pathlib import Path
@@ -10,13 +9,9 @@ from PyQt5 import uic, QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.Qt import QCoreApplication
 from Qt.Splashscreen.SplashScreen import SplashScreen
-from threading import Thread
-from multiprocessing import Pool
 
 
 class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
-    # fire if preloading is done
-    loading_done_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super(MAIN_UI, self).__init__(parent)

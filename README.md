@@ -43,4 +43,6 @@ To get an idea how it looks like
 
 # QT/Splashscreen
 
+Doing a Splashscreen, have look at `SplashScreenTest.py`
+
 This stuff is provided as it is, gl & hf!
