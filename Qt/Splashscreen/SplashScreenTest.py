@@ -36,45 +36,37 @@ class MAIN_UI(PyQt5.QtWidgets.QMainWindow):
         # event.ignore()
         pass
 
-def preload():
+    def setData(self, data):
+        """ do something with preloaded data """
+        pass
+
+
+def preload(splash, app):
     """ here we are loading all data that we need """
-    time.sleep(2)
+    splash.setProgressMax(4)
+    for i in range(4):
+        time.sleep(1)
+        app.processEvents()
+        splash.step()
+
+    app.processEvents()
     return 0
 
 
 def main():
     app = QApplication(sys.argv)
-    """
-    splash = SplashScreen()
-    splash.show_splash()
-    # create MAin Window, takes some time
-    gui = MAIN_UI(splash)  #noqa
-    gui.preload()
-    splash.close()
-    """  
-       
-    
+
     # Create and display the splash screen
     splash = SplashScreen()
-#   splash.setMask(splash_pix.mask())
-    #splash.raise_()
     splash.show()
     app.processEvents()
-    # this event loop is needed for dispatching of Qt events
-    initLoop = QtCore.QEventLoop()
-    pool = Pool(processes=1)
-    pool.apply_async(preload, None, callback=lambda exitCode: initLoop.exit(exitCode))
-    initLoop.exec_()
-    
-    gui = MAIN_UI()  #noqa
-    gui.preload()
 
-    
-    
-    
-    
-    
+    gui = MAIN_UI()  #noqa
+    data = preload(splash, app)
+    gui.setData(data)
     gui.show()
+
+    time.sleep(1)
     splash.finish(gui)
 
     app.exec_()

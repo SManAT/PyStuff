@@ -26,10 +26,16 @@ What u nedd is OpenCV > `sudo pip install opencv-python`.
 
 ## How to use it
 ```python3
-soon
+self.cv = OpenCVLib()
+icon = self.cv.readPNG("test/file_ok.png")
+icon = self.cv.resizeTo(icon, 64, 64)
+pixmap = self.cv.overlayIcon(self.ui.image.pixmap(), icon, 100, 10)
+# write back
+self.ui.image.setPixmap(pixmap)
 ```
 To get an idea how it looks like
 ![Screenshot](./img/overlay.jpg)
 
+# QT/Splashscreen
 
 This stuff is provided as it is, gl & hf!
