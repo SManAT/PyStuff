@@ -6,6 +6,8 @@ from pathlib import Path
 from PyQt5.Qt import QProgressBar, QFont, QColor
 from PyQt5.QtWidgets import QSplashScreen
 from PyQt5 import QtGui, QtCore
+from PyQt5.QtGui import QGuiApplication
+from Qt.OvelayIcons.OpenCVLib import OpenCVLib
 
 
 class SplashScreen(QSplashScreen):
@@ -17,21 +19,12 @@ class SplashScreen(QSplashScreen):
         QSplashScreen.__init__(self, QtGui.QPixmap(), QtCore.Qt.WindowStaysOnTopHint)
 
         self.rootDir = Path(__file__).parent
-        image = self.rootDir.joinpath("img/loading.jpg").as_posix()
-        self.version = "3.4"
 
-        splash_pix = QtGui.QPixmap(image)
-        # Add version
-        painter = QtGui.QPainter()
-        painter.begin(splash_pix)
+        # default values
+        self.image = self.rootDir.joinpath("img/loading.jpg").as_posix()
+        self.version = "3.x"
 
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-        painter.setPen(QColor("#000000"))
-        painter.drawText(0, 0, splash_pix.size().width() - 3,
-                         splash_pix.size().height() - 1,
-                         QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight, self.version)
-        painter.end()
-        self.setPixmap(splash_pix)
+        self.cv = OpenCVLib()
 
         self.progressBar = QProgressBar(self)
         self.progressBar.setMinimum(0)
@@ -54,6 +47,44 @@ class SplashScreen(QSplashScreen):
                 margin-top: 10px;
             }
             """)
+
+    def scale(self, pix):
+        gold = 0.618
+        h = pix.height()
+
+        # max width 68% of screen
+        screen = QGuiApplication.screens()[0]
+        new_w = screen.geometry().width() * gold
+        new_h = h * gold
+        # print("%s x %s" %(w, h))
+        # python resize
+        # return pix.scaled(new_w, new_h, Qt.KeepAspectRatioByExpanding | Qt.SmoothTransformation)
+        # resize with opencv
+        Qimg = pix.toImage()
+        img = self.cv.QImage2MAT(Qimg)
+        resized = self.cv.resizeTo(img, new_w, new_h)
+        return self.cv.MAT2QPixmap(resized)
+
+    def setVersion(self, version):
+        """ adds a Version Number and updates the image """
+        self.version = version
+        self.setImage(self.image)
+
+    def setImage(self, img):
+        """ sets the image and adds a Version Number """
+        self.image = self.image = self.rootDir.joinpath(img).as_posix()
+        splash_pix = QtGui.QPixmap(img)
+        # Add version
+        painter = QtGui.QPainter()
+        painter.begin(splash_pix)
+
+        painter.setFont(QFont("Arial", 8, QFont.Bold))
+        painter.setPen(QColor("#000000"))
+        painter.drawText(0, 0, splash_pix.size().width() - 3,
+                         splash_pix.size().height() - 1,
+                         QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight, self.version)
+        painter.end()
+        self.setPixmap(self.scale(splash_pix))
 
     def _incProgressbar(self):
         self.progressBar.setValue(self.progressBar.value() + 1)

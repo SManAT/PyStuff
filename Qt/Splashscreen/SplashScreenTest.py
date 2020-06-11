@@ -53,6 +53,8 @@ def main():
 
     # Create and display the splash screen
     splash = SplashScreen()
+    splash.setImage("img/abstract_wave.jpg")
+    splash.setVersion("4.0")
     splash.show()
     app.processEvents()
 
