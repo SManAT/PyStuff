@@ -106,7 +106,7 @@ class SplashScreen(QSplashScreen):
 
     def setImage(self, img):
         """ sets the image and adds a Version Number """
-        self.image = self.image = self.rootDir.joinpath(img).as_posix()
+        self.image = self.rootDir.joinpath(img).as_posix()
         splash_pix = QtGui.QPixmap(img)
         # Add version
         painter = QtGui.QPainter()
