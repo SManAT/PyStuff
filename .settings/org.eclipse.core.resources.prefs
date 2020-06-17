@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//Qt/ConnectionStatus/ConnectionStatus.py=utf-8
 encoding//Qt/Notification/Notification.py=utf-8
 encoding//Qt/Notification/NotificationDispatcher.py=utf-8
 encoding//Qt/Notification/NotificationTest.py=utf-8
