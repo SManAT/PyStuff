@@ -3,7 +3,7 @@
 # Copyright (C) 2019 Stefan Hagmann
 import sys
 from PyQt5.QtWidgets import QApplication
-from Notification import Notification_Core, Notification
+from Qt.ConnectionStatus.ConnectionStatus import ConnectionStatus
 
 
 def close_app():
@@ -12,11 +12,12 @@ def close_app():
 
 def printhelp():
     msg = '''
-python3 NotificationDispatcher.py "Type" "Message"
-    Type ... Error, Information, Success, Warning
+python3 ConnectionStatusDispatcher.py type
+    1 ... connected
+    something else = NOT connected
 
 example:
-python3 NotificationDispatcher.py "Information" "Linux is great!"
+python3 ConnectionStatusDispatcher.py 1
 '''
     print(msg)
     sys.exit(0)
@@ -24,28 +25,15 @@ python3 NotificationDispatcher.py "Information" "Linux is great!"
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    if len(sys.argv) != 3:
-        print("Argument mismatch...")
-        printhelp()
+    #if len(sys.argv) != 2:
+    #    print("Argument mismatch...")
+    #    printhelp()
+    #typ = sys.argv[1]
+    typ = 1
 
-    typ = sys.argv[1]
-    msg = sys.argv[2]
-
-    # maybe create a invisible main window?
-    # creates the Notification Dialog
-    n = Notification_Core()
-    notification = Notification(n)
-    notification.done_signal.connect(close_app)
-    if typ.lower() == "information":
-        notification.showInformation(msg)
-    elif typ.lower() == "error":
-        notification.showError(msg)
-    elif typ.lower() == "warning":
-        notification.showWarning(msg)
-    elif typ.lower() == "success":
-        notification.showSuccess(msg)
-    else:
-        print("Wrong Type ...")
-        printhelp()
+    status = ConnectionStatus()
+    status.setType(typ)
+    status.show()
+    
 
     app.exec_()
