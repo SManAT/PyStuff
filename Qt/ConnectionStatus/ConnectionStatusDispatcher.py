@@ -4,10 +4,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from Qt.ConnectionStatus.ConnectionStatus import ConnectionStatus
-import os
-import stat
-import signal
-import psutil
 
 
 def close_app():
