@@ -7,8 +7,7 @@ from PyQt5.Qt import QProgressBar, QFont, QColor, Qt
 from PyQt5.QtWidgets import QSplashScreen, QLabel, QGraphicsDropShadowEffect
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QGuiApplication
-from Qt.OvelayIcons.OpenCVLib import OpenCVLib
-
+from classes.OpenCVLib import OpenCVLib
 
 
 class SplashScreen(QSplashScreen):
@@ -22,16 +21,15 @@ class SplashScreen(QSplashScreen):
         self.rootDir = Path(__file__).parent
 
         # default values
-        self.image = self.rootDir.joinpath("img/loading.jpg").as_posix()
-        self.version = "3.x"
+        self.image = None
+        self.version = "Version: 3.x"
+
         # pixmap.height - ?
-        self.progress_y = 60
-        # Version Font Size
-        self.vsize = 24
+        self.progress_y = 68
         # pixmap.width - ?
-        self.vx = 16
+        self.vx = 24
         # pixmap.height - ?
-        self.vy = 26
+        self.vy = 32
         # message font size
         self.msize = 12
 
@@ -72,6 +70,11 @@ class SplashScreen(QSplashScreen):
               margin:  0 1px;
             }
             """)
+    
+    def show(self, *args, **kwargs):
+        if self.image == None:
+            raise ValueError('Specify an Image via SplashScreen::setImage()')
+        return QSplashScreen.show(self, *args, **kwargs)
 
     def setMessage(self, msg):
         self.message.setText("%s ..." % (msg))
@@ -95,14 +98,14 @@ class SplashScreen(QSplashScreen):
 
     def scale(self, pix):
         gold = 0.618
-        h = pix.height()
-        w = pix.width()
+        h = pix.size().height()
+        w = pix.size().width()
 
         # max width 68% of screen
         screen = QGuiApplication.screens()[0]
         new_w = screen.geometry().width() * gold
         new_h = h * new_w / w
-        # print("%s x %s" %(w, h))
+
         # python resize
         # return pix.scaled(new_w, new_h, Qt.KeepAspectRatioByExpanding | Qt.SmoothTransformation)
         # resize with opencv
@@ -113,8 +116,7 @@ class SplashScreen(QSplashScreen):
 
     def setVersion(self, version):
         """ adds a Version Number and updates the image """
-        self.version = version
-        self.setImage(self.image)
+        self.version = "Version: %s" % version
 
     def paintEvent(self, *args, **kwargs):
         """ override, important to work """
@@ -122,13 +124,17 @@ class SplashScreen(QSplashScreen):
 
     def setImage(self, img):
         """ sets the image and adds a Version Number """
+
         self.image = self.rootDir.joinpath(img).as_posix()
-        splash_pix = QtGui.QPixmap(self.image)
+        splash_pix = QtGui.QPixmap(self.image, format='jpg')
+        if splash_pix.isNull():
+            raise ValueError('Error loading Image [self.image]')
+
         # Add version
         painter = QtGui.QPainter(splash_pix)
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
-        painter.setFont(QFont("Arial", self.vsize, QFont.Bold))
-        painter.setPen(QColor("#FFFFFF"))
+        painter.setFont(QFont("Arial", 18))
+        painter.setPen(QColor("#666666"))
         painter.drawText(0, 0, splash_pix.size().width() - self.vx,
                          splash_pix.size().height() - self.vy,
                          QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight, self.version)
