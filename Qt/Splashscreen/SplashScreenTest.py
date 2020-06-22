@@ -54,8 +54,10 @@ def main():
 
     # Create and display the splash screen
     splash = SplashScreen()
-    splash.setImage("img/LIFE.jpg")
+    # set version first!
     splash.setVersion("4.0")
+    splash.setImage("img/LIFE.jpg")
+    
     splash.show()
     app.processEvents()
 
