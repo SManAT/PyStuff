@@ -5,6 +5,7 @@ import os
 import subprocess
 import stat
 import sys
+import glob
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,7 @@ def openFileManager(path):
         subprocess.check_call(['xdg-open', path])
     elif sys.platform == 'win32':
         subprocess.check_call(['explorer', path])
-        
+
 def countFiles(path):
     """count number of files and dirs in directory"""
     files_count = 0
@@ -59,4 +60,10 @@ def countFiles(path):
         files_count = len(files)
         dir_count = len(dirs)
     return [files_count, dir_count]
-    
+
+def search_files(directory='.', pattern=''):
+    """ search for pattern in directory recursive """
+    data = []
+    for name in glob.glob(pattern):
+        data.append(name)
+    return data
