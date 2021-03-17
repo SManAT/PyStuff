@@ -5,7 +5,7 @@ import os
 import subprocess
 import stat
 import sys
-import glob
+import fnmatch
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +38,7 @@ def changePermission(path, octal):
         mode = stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
     os.chmod(path, st.st_mode | mode)
 
+
 def openFileManager(path):
     """ cross OS """
     # MacOS
@@ -47,6 +48,7 @@ def openFileManager(path):
         subprocess.check_call(['xdg-open', path])
     elif sys.platform == 'win32':
         subprocess.check_call(['explorer', path])
+
 
 def countFiles(path):
     """count number of files and dirs in directory"""
@@ -61,9 +63,11 @@ def countFiles(path):
         dir_count = len(dirs)
     return [files_count, dir_count]
 
+
 def search_files(directory='.', pattern=''):
     """ search for pattern in directory recursive """
     data = []
-    for name in glob.glob(pattern):
-        data.append(name)
+    for dirpath, dirnames, files in os.walk(directory):
+        for f in fnmatch.filter(files, pattern):
+            data.append(f)
     return data
