@@ -4,6 +4,7 @@ from re import search
 
 class PsUtil():
     ''' Library for psutil '''
+
     def _closePID(self, pid):
         """kill the old running Process"""
         PID = int(pid)
@@ -24,8 +25,6 @@ class PsUtil():
                 found = True
                 break
         return found
-            
-        
 
     def GetProcessByName(self, name, cmdline=None):
         """ 
@@ -45,8 +44,8 @@ class PsUtil():
                             processlist.append(data)
             except Exception as e:
                 print(e)
-        return processlist 
-    
+        return processlist
+
     def killProcess(self, pid):
         """kill a running Process"""
         PID = int(pid)

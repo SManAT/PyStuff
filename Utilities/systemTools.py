@@ -66,7 +66,7 @@ def countFiles(path):
 
 def search_files(directory='.', pattern=''):
     """ search for pattern in directory recursive """
-        data = []
+    data = []
     for dirpath, dirnames, files in os.walk(directory):
         for f in fnmatch.filter(files, pattern):
             data.append(os.path.join(dirpath, f))

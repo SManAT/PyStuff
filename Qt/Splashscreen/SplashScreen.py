@@ -70,7 +70,7 @@ class SplashScreen(QSplashScreen):
               margin:  0 1px;
             }
             """)
-    
+
     def show(self, *args, **kwargs):
         if self.image == None:
             raise ValueError('Specify an Image via SplashScreen::setImage()')
