@@ -22,7 +22,7 @@ for eth in eth_dict:
 
 # build it together
 result = {}
-for i in range(len(eth_list)):
+for i, k in enumerate(eth_list):
     try:
         data = {}
         data['name'] = eth_list[i]
