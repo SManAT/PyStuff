@@ -53,11 +53,9 @@ if onlyActive is True:
     # filter out inactive Adresses
     for i, k in enumerate(result):
         item = result[i]
-        found = False
         for i2, k2 in enumerate(available_networks):
             item2 = available_networks[i2]
             if item['name'] in item2:
-                found = True
                 filteredResult[i] = item
     print(filteredResult)
 else:
