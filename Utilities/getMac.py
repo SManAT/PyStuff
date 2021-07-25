@@ -7,7 +7,20 @@ ipv6_list = []
 eth_id_list = []
 mac_list = []
 
+onlyActive = True
+
 eth_dict = psutil.net_if_addrs()
+# get active interfaces
+stats = psutil.net_if_stats()
+available_networks = []
+for intface, addr_list in eth_dict.items():
+    if any(getattr(addr, 'address').startswith("169.254") for addr in addr_list):
+        continue
+    elif intface in stats and getattr(stats[intface], "isup"):
+        available_networks.append(intface)
+# -----------------------
+
+# collect informations
 for eth in eth_dict:
     eth_list.append(eth)
     eth_id_list.append(eth)
@@ -35,7 +48,20 @@ for i, k in enumerate(eth_list):
     except Exception:
         pass
 
-for i, k in enumerate(result):
-    item = result[i]
-    print("---------")
-    print("%s, %s, %s " % (item['name'], item['mac'], item['ip4']))
+if onlyActive is True:
+    filteredResult = {}
+    # filter out inactive Adresses
+    for i, k in enumerate(result):
+        item = result[i]
+        found = False
+        for i2, k2 in enumerate(available_networks):
+            item2 = available_networks[i2]
+            if item['name'] in item2:
+                found = True
+                filteredResult[i] = item
+    print(filteredResult)
+else:
+    for i, k in enumerate(result):
+        item = result[i]
+        print("---------")
+        print("%s, %s, %s " % (item['name'], item['mac'], item['ip4']))
