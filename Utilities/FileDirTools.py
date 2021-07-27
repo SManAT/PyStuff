@@ -41,6 +41,14 @@ class FileDirTools:
         except OSError as e:
             print("Error: %s : %s" % (path, e.strerror))
 
+    # File Operations -------------------------------------------------------------------
+
+    def rmFile(self, filename):
+        if (os.path.exists(filename) is True):
+            os.remove(filename
+
+
+    # Stuff -----------------------------------------------------------------------------
     def changePermission(self, path, octal):
         """
         change the permission to ... see man 2 open
@@ -64,9 +72,9 @@ class FileDirTools:
         stat.S_IWOTH − Write by others.
         stat.S_IXOTH − Execute by others.
         """
-        st = os.stat(path)
+        st=os.stat(path)
         if octal == "777":
-            mode = stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+            mode=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
         os.chmod(path, st.st_mode | mode)
 
     def openFileManager(self, path):
@@ -78,8 +86,3 @@ class FileDirTools:
             subprocess.check_call(['xdg-open', path])
         elif sys.platform == 'win32':
             subprocess.check_call(['explorer', path])
-
-    # File Operations -------------------------------------------------------------------
-    def rmFile(self, filename):
-        if (os.path.exists(filename) is True):
-            os.remove(filename
