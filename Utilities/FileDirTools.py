@@ -78,3 +78,8 @@ class FileDirTools:
             subprocess.check_call(['xdg-open', path])
         elif sys.platform == 'win32':
             subprocess.check_call(['explorer', path])
+
+    # File Operations -------------------------------------------------------------------
+    def rmFile(self, filename):
+        if (os.path.exists(filename) is True):
+            os.remove(filename
