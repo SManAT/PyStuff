@@ -5,7 +5,15 @@ just look around, not everything is listed in this MD.
 
 # PyQT6/PySide6 dark Template
 
-- [Read on](Templates/dark/README.md)
+[Read on here ...](Templates/dark/README.md)
+
+# Utilities
+
+a lot of code snippets...
+
+# OpenCV
+
+[OpenCV Stuff you find here ...](OpenCV/README.md)
 
 # QT/Notification
 
