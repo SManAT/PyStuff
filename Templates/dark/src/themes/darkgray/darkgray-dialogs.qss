@@ -1,0 +1,57 @@
+QMainWindow::separator
+{
+    background-color: #f0f0f0;
+    color: white;
+    padding-left: 4px;
+    spacing: 2px;
+    border: 1px dashed #76797C;
+}
+
+QMainWindow::separator:hover
+{
+
+    background-color: #787876;
+    color: white;
+    padding-left: 4px;
+    border: 1px solid #76797C;
+    spacing: 2px;
+}
+QToolTip
+{
+     border: 1px solid black;
+     background-color: #D1DBCB;
+     padding: 1px;
+     border-radius: 3px;
+     opacity: 100;
+}
+
+QWidget
+{
+    color: #232323;
+    background-color: #f0f0f0;
+    selection-background-color:#f0f0f0;
+    selection-color: black;
+    background-clip: border;
+    border-image: none;
+    border: 0px transparent black;
+    outline: 0;
+}
+
+QWidget#border
+{
+  background-color: #232323;
+}
+
+
+QWidget:item:hover
+{
+    background-color: #D1DBCB;
+    color: black;
+}
+
+QWidget:item:selected
+{
+    background-color: #D1DBCB;
+    border: 0px
+}
+

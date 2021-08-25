@@ -1,5 +1,10 @@
 <RCC>
   <qresource prefix="qss_icons">
+    <file>themes/darkgray/icons/window_close_sw.svg</file>
+    <file>themes/darkgray/icons/warning.png</file>
+    <file>themes/darkgray/icons/error.png</file>
+    <file>themes/darkgray/icons/notice.png</file>
+    <file>themes/darkgray/icons/success.png</file>
     <file>themes/darkgray/icons/window_crip.svg</file>
     <file>themes/darkgray/icons/window_normal.svg</file>
     <file>themes/darkgray/icons/window_close.svg</file>

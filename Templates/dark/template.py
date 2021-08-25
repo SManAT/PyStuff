@@ -7,12 +7,11 @@ from src.config.LoggerConfiguration import configure_logging
 from src.controllers.Users import Users
 from ui_main import Ui_MainWindow
 from src.ui_Functions import ui_Functions
-from ui_dialog import Ui_Dialog
-from ui_error import Ui_Error
 from PySide6.QtWidgets import QMainWindow, QApplication
 import yaml
 import logging
-from PySide6 import QtGui
+from PySide6 import QtGui, QtCore
+from Dialog import Dialog
 
 
 class MainWindow(QMainWindow):
@@ -32,14 +31,9 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QtGui.QIcon(os.path.join(self.rootDir, 'App.ico')))
 
         # Connectors
-        self.ui.azure_update.clicked.connect(self.azureUpdate)
         self.ui.btn_close.clicked.connect(self.window_close)
         self.ui.btn_max.clicked.connect(self.ui_functions.maximize_restore)
         self.ui.btn_min.clicked.connect(self.showMinimized)
-
-        # ?? in progress
-        self.dialog = Ui_Dialog()
-        self.error = Ui_Error()
 
         # Database Setup --------------------------
         self.db = Database(self.dbDir)
@@ -47,19 +41,22 @@ class MainWindow(QMainWindow):
         # Setup Tables ----------------------------
         table_user = Users(self, "users")
         table_user.setup()
-        
 
-        # dialogexec("Heading", "Message", "icon", "Button1name", "button2name")
-        # errorexec("Message", "icon", "buttonname")
-        
+        QtCore.QTimer.singleShot(500, lambda: self.test())
 
-    def dialogexec(self, heading, message, icon, btn1, btn2):
-        self.dialog.dialogConstrict(self.dialog, heading, message, icon, btn1, btn2)
-        self.dialog.exec_()
-
-    def errorexec(self, heading, icon, btnOk):
-        self.error.errorConstrict(self.error, heading, icon, btnOk)
-        self.error.exec_()
+    def test(self):
+        """ only a Test Situation """
+        dialog = Dialog()
+        self.ui_functions.showDialog(dialog, "Information",
+                                     "Heute ist ein \n schöner Tag",
+                                     "warning",
+                                     "Cancel",
+                                     "OK")
+        # which Button was pressed
+        if dialog.leftButton is True:
+            print("Left")
+        if dialog.rightButton is True:
+            print("Right")
 
     def closeEvent(self, event):
         """ catch the closing Event """
@@ -91,18 +88,10 @@ class MainWindow(QMainWindow):
         with open(self.configFile, 'rt') as f:
             yml = yaml.safe_load(f.read())
         return yml
-    
-    def azureUpdate(self):
-        """ Update Users from Azure DB """
-        azure = Azure(self.config)
-        azure.getAccounts()
-        
+
     def window_close(self):
         """ exit the app """
         app.quit()
-     
-    
-    
 
 
 if __name__ == "__main__":

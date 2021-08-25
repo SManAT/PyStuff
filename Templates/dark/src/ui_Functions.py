@@ -1,6 +1,6 @@
 from PySide6 import QtGui, QtCore
-from PySide6.QtCore import QPoint
-from PySide6.QtGui import Qt, QCursor
+from PySide6.QtCore import QPoint, QSize
+from PySide6.QtGui import Qt, QCursor, QIcon
 
 
 class ui_Functions():
@@ -120,3 +120,21 @@ class ui_Functions():
             height = p.y() - wpos.y()
             self.window.resize(width, height)
             event.accept()
+
+    def showDialog(self, dialog, title, msg, icon, btn1, btn2):
+        """
+        show a dialog
+        :param dialog: dialog Object
+        :param title: title of the dialog
+        :param msg: the message to display
+        :param icon: icon to display warning|notice|error|success
+        :param btn1: text of button1
+        :param btn2: text of button2
+        """
+        dialog.setTitle(title)
+        dialog.setBtn1(btn1)
+        dialog.setBtn2(btn2)
+        dialog.setMessage(msg)
+        dialog.setIcon(icon)
+        dialog.exec()
+
