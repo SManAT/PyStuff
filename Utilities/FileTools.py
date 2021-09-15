@@ -10,43 +10,17 @@ import shutil
 import fnmatch
 
 
-class FileDirTools:
+class FileTools:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-
-    def countFiles(self, path):
-        """count number of files and dirs in directory"""
-        files_count = 0
-        dir_count = 0
-        for root, dirs, files in os.walk(path, topdown=False):
-            for name in files:
-                print(os.path.join(root, name))
-            for name in dirs:
-                print(os.path.join(root, name))
-            files_count = len(files)
-            dir_count = len(dirs)
-        return [files_count, dir_count]
-
-    def search_files(self, directory='.', pattern=''):
-        """ search for pattern in directory recursive """
-        data = []
-        for dirpath, dirnames, files in os.walk(directory):
-            for f in fnmatch.filter(files, pattern):
-                data.append(os.path.join(dirpath, f))
-        return data
-
-    def deleteDir(self, path):
-        """ delete a directory, even if it is not empty """
-        try:
-            shutil.rmtree(path)
-        except OSError as e:
-            print("Error: %s : %s" % (path, e.strerror))
-
-    # File Operations -------------------------------------------------------------------
 
     def rmFile(self, filename):
         if (os.path.exists(filename) is True):
             os.remove(filename
+
+    def getFileExtension(self, filename):
+        """ get Extension of a File without . """
+        return os.path.splitext(filename)[1][1:].strip().lower()
 
 
     # Stuff -----------------------------------------------------------------------------
