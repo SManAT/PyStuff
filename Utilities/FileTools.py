@@ -3,11 +3,10 @@
 
 import logging
 import os
-import subprocess
 import stat
 import sys
-import shutil
-import fnmatch
+import subprocess
+from pathlib import Path
 
 
 class FileTools:
@@ -16,14 +15,16 @@ class FileTools:
 
     def rmFile(self, filename):
         if (os.path.exists(filename) is True):
-            os.remove(filename
+            os.remove(filename)
 
     def getFileExtension(self, filename):
         """ get Extension of a File without . """
         return os.path.splitext(filename)[1][1:].strip().lower()
 
+    def getFilename(self, filename):
+        """ get the filename only, without extension """
+        return Path(filename).stem
 
-    # Stuff -----------------------------------------------------------------------------
     def changePermission(self, path, octal):
         """
         change the permission to ... see man 2 open
@@ -47,9 +48,9 @@ class FileTools:
         stat.S_IWOTH − Write by others.
         stat.S_IXOTH − Execute by others.
         """
-        st=os.stat(path)
+        st = os.stat(path)
         if octal == "777":
-            mode=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+            mode = stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
         os.chmod(path, st.st_mode | mode)
 
     def openFileManager(self, path):

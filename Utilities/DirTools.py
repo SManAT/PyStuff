@@ -28,11 +28,16 @@ class DirTools:
         return [files_count, dir_count]
 
     def search_files(self, directory='.', pattern=''):
-        """ search for pattern in directory recursive """
+        """
+        search for pattern in directory recursive
+        :param directory: path where to search. relative or absolute
+        :param pattern: a list e.g. ['*.jpg', '__.*']
+        """
         data = []
         for dirpath, dirnames, files in os.walk(directory):
-            for f in fnmatch.filter(files, pattern):
-                data.append(os.path.join(dirpath, f))
+            for p in pattern:
+                for f in fnmatch.filter(files, p):
+                    data.append(os.path.join(dirpath, f))
         return data
 
     def deleteDir(self, path):
