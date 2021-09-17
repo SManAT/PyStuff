@@ -2,7 +2,7 @@ import subprocess
 
 
 class CmdRunner():
-    ''' A Class for runing cmds with subprocess, also as a specific user '''
+    ''' A Class for runing cmds with subprocess '''
     pid = None
 
     def __init__(self):
