@@ -62,3 +62,14 @@ class FileTools:
             subprocess.check_call(['xdg-open', path])
         elif sys.platform == 'win32':
             subprocess.check_call(['explorer', path])
+
+    def makeWindowsSavePath(self, path):
+        """ will e.g. C:\Program Files\ to C:\"Program Files"\ """
+        parts = path.split("\\")
+        erg = ""
+        for p in parts:
+            if p.find(" ", 1) > 0:
+                erg += '"%s"\\' % p
+            else:
+                erg += "%s\\" % p
+        return erg[:-1]
