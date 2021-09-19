@@ -47,6 +47,11 @@ class DirTools:
         except OSError as e:
             print("Error: %s : %s" % (path, e.strerror))
 
+    def createDir(self, path):
+        """ create dir if it not exists """
+        if os.path.isdir(path) is False:
+            os.mkdir(path)
+
     def openFileManager(self, path):
         """ cross OS """
         # MacOS
