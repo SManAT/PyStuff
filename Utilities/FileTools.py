@@ -73,3 +73,20 @@ class FileTools:
             else:
                 erg += "%s\\" % p
         return erg[:-1]
+
+
+def websaveName(context):
+    """ creates a websave Name """
+    table = [
+        ['ä', 'ae'],
+        ['ü', 'ue'],
+        ['ö', 'oe'],
+        ['ß', 'ss'],
+        ['Ä', 'Ae'],
+        ['Ö', 'Oe'],
+        ['Ü', 'Üe'],
+        [' ', '_'],
+    ]
+    for item in table:
+        context = context.replace(item[0], item[1])
+    return context
