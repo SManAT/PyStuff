@@ -27,7 +27,7 @@ class DirTools:
             dir_count = len(dirs)
         return [files_count, dir_count]
 
-    def search_files(self, directory='.', pattern=''):
+    def search_files(self, directory='.', pattern='.*'):
         """
         search for pattern in directory recursive
         :param directory: path where to search. relative or absolute
