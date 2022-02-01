@@ -41,7 +41,7 @@ class IMage2Base64Converter():
                 print("Saving to: %s" % new_filename)
 
                 file = open(new_filename, 'w')
-                file.write("%s" % my_string.decode("utf-8"))
+                file.write("%s%s" % ("data:image/png;base64,", my_string.decode("utf-8")))
                 file.close()
 
 
