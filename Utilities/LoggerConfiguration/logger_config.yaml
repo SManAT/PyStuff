@@ -18,7 +18,7 @@ handlers:
   debug_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: INFO
-    formatter: default
+    formatter: simple
     filename: encryptMe.log
     maxBytes: 1048576 # 1MB
     backupCount: 2
@@ -33,5 +33,5 @@ loggers:
     
 root:
   level: NOTSET
-  handlers: [console]
+  handlers: [console, debug_file_handler]
   propogate: yes
