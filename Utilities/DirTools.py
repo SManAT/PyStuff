@@ -40,6 +40,24 @@ class DirTools:
                     data.append(os.path.join(dirpath, f))
         return data
 
+    def search_files_in_dir(self, directory='.', pattern=''):
+        """
+        search for pattern in directory NOT recursive
+        :param directory: path where to search. relative or absolute
+        :param pattern: a list e.g. ['.jpg', '.gif']
+        """
+        data = []
+        for child in Path(directory).iterdir():
+            if child.is_file():
+                print(f"{child.name}")       
+                if pattern == '':
+                    data.append(os.path.join(directory, child.name))
+                else:
+                    for p in pattern:
+                        if child.name.endswith(p):
+                            data.append(os.path.join(directory, child.name))
+        return data
+
     def deleteDir(self, path):
         """ delete a directory, even if it is not empty """
         try:
