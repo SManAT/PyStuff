@@ -4,9 +4,9 @@ some things markable for me to remember
 just look around, not everything is listed in this MD.
 
 # apps/*
-usefull little tools
-[Image2Base64Converter](apps/Image2Base64Converter/README.md)
-[CodeHighlighter](apps/CodeHighlighter/README.md)
+usefull little tools  
+- [Image2Base64Converter](apps/Image2Base64Converter/README.md)
+- [CodeHighlighter](apps/CodeHighlighter/README.md)
 
 # PyQT6/PySide6 dark Template
 
