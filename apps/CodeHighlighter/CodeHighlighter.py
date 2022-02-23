@@ -1,52 +1,61 @@
-from pygments import highlight
-from pygments import lexers
-from pygments.formatters.html import HtmlFormatter
-from pygments.styles import get_style_by_name, get_all_styles
+import sys
+
+from pathlib import Path
+import os
+import logging
+
+from src.ui_Functions import ui_Functions
+from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6 import QtGui
+from ui_main import Ui_MainWindow
+from src.config.LoggerConfiguration import configure_logging
 
 
-class Highlighter():
-    """
-    A Class to Highlight Source Code
-    see https://pygments.org/docs/quickstart/#example
-    """
-    def __init__(self):
-        pass
+class MainWindow(QMainWindow):
+    def __init__(self): 
+        super(MainWindow, self).__init__()
+        self.logger = logging.getLogger('MainWindow')
+        self.ui = Ui_MainWindow()
+        self.rootDir = Path(__file__).parent
 
-    def showAllLexer(self):  
-        """ will show all available lexers """
-        for lexer in lexers.get_all_lexers():
-            print(lexer)
+        # UI Stuff
+        self.ui.setupUi(self)
+        self.ui_functions = ui_Functions(self, self.ui)
+        self.ui_functions.setWindowTitle('Code Highlighter')
+        self.setWindowIcon(QtGui.QIcon(os.path.join(self.rootDir, 'App.ico')))
 
-    def showAllStyles(self):  
-        """ will show all available styles """
-        for s in get_all_styles():
-            print(s)
+        # Connectors
+        self.ui.btn_close.clicked.connect(self.window_close)
+        self.ui.btn_max.clicked.connect(self.ui_functions.maximize_restore)
+        self.ui.btn_min.clicked.connect(self.showMinimized)
 
-    def simpleTest(self):
-        code = "INSERT INTO gaestebuch (datum,name,titel,eintrag) VALUES('20010719153145','Christian Felken','Mein Gästebucheintrag','HalloWelt!');"
-        lexer = lexers.get_lexer_by_name('SQL')
-
-        selected_style = get_style_by_name('one-dark')
-        # see https://pygments.org/docs/formatters/?highlight=inline
-        formatter = HtmlFormatter(
-            linenos=True, 
-            full=False,            # no full html document, just the code 
-            style=selected_style,
-            noclasses=True,        # use inline CSS
-            
-            )
-        # Highlight
-        filename = 'test.html'
-        with open(filename, 'w') as f: 
-            highlight(code, lexer, formatter, outfile=f)
+        # dialogexec("Heading", "Message", "icon", "Button1name", "button2name")
+        # errorexec("Message", "icon", "buttonname")
         
-        print("\nOutput: %s" % filename)
+
+    def dialogexec(self, heading, message, icon, btn1, btn2):
+        self.dialog.dialogConstrict(self.dialog, heading, message, icon, btn1, btn2)
+        self.dialog.exec_()
+
+    def errorexec(self, heading, icon, btnOk):
+        self.error.errorConstrict(self.error, heading, icon, btnOk)
+        self.error.exec_()
+
+    def closeEvent(self, event):
+        """ catch the closing Event """
+        print("X is clicked: I'm now closing ...")
+        
+    def window_close(self):
+        """ exit the app """
+        app.quit()
+     
+    
+    
 
 
 if __name__ == "__main__":
-    tool = Highlighter()
-    print("Lexers ====================================================================")
-    tool.showAllLexer()
-    print("\n\nStyles ====================================================================")
-    tool.showAllStyles()
-    tool.simpleTest()
+    app = QApplication(sys.argv)
+    configure_logging()
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
