@@ -18,7 +18,9 @@ if __name__ == '__main__':
             'PyYAML',
             'click',
             'Pygments',
-            'cx_Freeze'
+            'cx_Freeze',
+            'PyQt6',
+            'PySide6',
         ],
         python_requires='>=3.8',
     )
