@@ -32,6 +32,12 @@ class MainWindow(QMainWindow):
         # dialogexec("Heading", "Message", "icon", "Button1name", "button2name")
         # errorexec("Message", "icon", "buttonname")
         
+        # focus Textfield
+        self.ui.textEdit.selectAll()
+        self.ui.textEdit.setFocus()
+        
+        # Clipboard https://pythonprogramminglanguage.com/pyqt-clipboard/
+        
 
     def dialogexec(self, heading, message, icon, btn1, btn2):
         self.dialog.dialogConstrict(self.dialog, heading, message, icon, btn1, btn2)
@@ -49,8 +55,6 @@ class MainWindow(QMainWindow):
         """ exit the app """
         app.quit()
      
-    
-    
 
 
 if __name__ == "__main__":
