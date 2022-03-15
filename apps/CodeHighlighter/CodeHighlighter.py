@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         self.ui.textEdit.selectAll()
         self.ui.textEdit.setFocus()
         
-        # Clipboard https://pythonprogramminglanguage.com/pyqt-clipboard/
+        # Clipboard https://pythonprogramminglanguage.com/pyqt-clipboard/n
         
 
     def dialogexec(self, heading, message, icon, btn1, btn2):
