@@ -14,6 +14,12 @@ class DirTools:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
+    def pathEndingSlash(path):
+        """ check for ending slash at path """
+        if path.endswith(os.path.sep) is False:
+          path = "%s%s" % (path, os.path.sep)
+        return path
+
     def countFiles(self, path):
         """count number of files and dirs in directory"""
         files_count = 0
