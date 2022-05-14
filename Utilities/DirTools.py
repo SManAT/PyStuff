@@ -4,10 +4,10 @@
 import logging
 import os
 import subprocess
-import stat
 import sys
 import shutil
 import fnmatch
+from pathlib import Path
 
 
 class DirTools:
@@ -34,13 +34,14 @@ class DirTools:
     return [files_count, dir_count]
 
   def getSubDirs(self, rootdir):
-    """ get alls Subdirectories from rootdir """
-    erg = []
-    for it in os.scandir(rootdir):
-      if it.is_dir():
-        erg.append(it.path)
-        self.getSubDirs(it)
-    return erg
+    """ get alls Subdirectories from rootdir, not recursive """
+    return [f.path for f in os.scandir(rootdir) if f.is_dir()]
+
+  def getSubDirsRecursive(self, rootdir):
+    subdirs = []
+    for x in os.walk(rootdir):
+        subdirs.append(x[0])
+    return subdirs
 
   def search_files(self, directory='.', pattern='.*'):
     """
