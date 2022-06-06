@@ -1,6 +1,6 @@
-# CodeHighlighter
+# RandomCodingTasks
 
-A Python Wrapper to fit my needs. Will convert Source Code to Html Code.  
+A Python Wrapper to fit my needs. 
 
 ## Usage
 

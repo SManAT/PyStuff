@@ -8,7 +8,7 @@ class User():
     pass
 
   def __str__(self):
-    return "%s %s" % (self.vorname, self.nachname)
+    return "%s %s %s" % (self.vorname, self.nachname, self.getKlasse())
 
   def setVorname(self, str):
     self.vorname = str
@@ -29,4 +29,8 @@ class User():
     return self.klasse
 
   def getFullname(self):
-    return "%s %s %s" % (self.getNachname(), self.getVorname(), self.getKlasse())
+    return "%s %s" % (self.getNachname(), self.getVorname())
+
+  def asDict(self):
+    """ return as Dictionary """
+    return {'vorname': self.getVorname(), 'nachname': self.getNachname(), 'klasse': self.getKlasse()}

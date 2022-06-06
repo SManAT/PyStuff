@@ -13,7 +13,7 @@ from pathlib import Path
 __author__ = 'Mag. Stefan Hagmann'
 __version__ = '1.0.0'
 # without Extension
-__pyfile__ = "UsermanagementAD"
+__pyfile__ = "RandomCodingTasks"
 
 # use relative paths
 include_files = []
@@ -32,7 +32,7 @@ base = None
 
 setup(
     name=__pyfile__,
-    description="Manage AD Users on a Windows Server via Powershell",
+    description="Create random Task Numbers for Students, and remember them",
     version=__version__,
     executables=[Executable(__pyfile__ + '.py', base=base, icon='App.ico')],
     options={'build_exe': {

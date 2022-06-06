@@ -21,46 +21,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
 import click
 import yaml
-import logging
-import sys
 
 from pathlib import Path
-from libs.CSVTool import CSVTool
-from libs.LoggerConfiguration import configure_logging
-from libs.Counter import Counter
-from libs.ScriptTool import ScriptTool
-from libs.Error import Error
+from libs.Tool import Tool
 
-class UsermanagementAD():
-    """ Backup Samba4 """
+
+class RandomCodingTasks():
+    """ Random select a Number """
     debug = False
 
-    def __init__(self):
+    def __init__(self, file, count, save, clear):
         self.rootDir = Path(__file__).parent
         self.configFile = os.path.join(self.rootDir, 'config.yaml')
 
-        # Logging Stuff
-        self.logger = logging.getLogger('UsermanagementAD')
-        self.tmpPath = os.path.join(self.rootDir, 'tmp/')
+        self.file = file
+        self.count = count
+        self.save = save
+        self.clear = clear
 
         self.config = self.load_yml()
-        self.debug = False
-        if self.config['config']['DEBUG'] == 1:
-          self.debug = True
-
-        self.error = Error()
-
-        info = ("\nUsermanagementAD, (c) Mag. Stefan Hagmann 2021\n"
-                "will manage AD Users on a Windows Server with Powershell\n"
+        self.config['root'] = self.rootDir
+        info = ("\nCreate Random Tasks for students, (c) Mag. Stefan Hagmann 2021\n"
                 "-------------------------------------------------------\n")
         print(info)
-
-        if self.debug:
-          print("TEST MODE, no script will be executed (see config.yaml)\n")
-
-        self.counter = Counter()
-        self.csv = CSVTool(self.debug)
-        self.tool = ScriptTool(self.rootDir, self.error, self.config, self.debug, self.counter)
 
     def load_yml(self):
         """ Load the yaml file config.yaml """
@@ -68,52 +51,26 @@ class UsermanagementAD():
             yml = yaml.safe_load(f.read())
         return yml
 
-    def Import(self, file):
-      """ Import Users from CSV File """
-      self.csv.read(file)
-
-      for user in self.csv.getUsers():
-        if user.isValid():
-          self.error.reset()  # set no errors yet
-          if self.tool.existsUser(user) is False:
-            self.tool.addUser(user)
-          else:
-            self.counter.incUserExists()
-            print("User EXISTS: %s\n" % user.getFullname())
-        else:
-          print("INVALID Data: %s" % user)
-          self.counter.incUserInvalid()
-
-      print("\n---------------------------------------------------")
-      # :<25 box with 25 chars length
-      print(f"{'Wrong Groups: ':<26} { str(self.counter.getWrongGroups()) }")
-      print(f"{'Import done ... ':<25} +{self.counter.getCreatedUser()} ({str(self.counter.getUserExists())} Existing Users, {str(self.counter.getUserInvalid())} Invalid Users)")
-
-    def Export(self):
-      """ Export Users to CSV File """
-      pass
+    def start(self):
+      tool = Tool(self.config, self.file, self.count, self.save, self.clear)
+      tool.start()
 
 
 @click.command()
-@click.option('-f', '--file', required=True, help='which file to use')
-@click.option('-i', '--import', 'importoption', is_flag=True, help='Import Users aus CSV Datei')
-@click.option('-e', '--export', 'exportoption', is_flag=True, help='Export Users in CSV Datei')
-def start(file, importoption, exportoption):
+@click.option('-f', '--file', required=True, help='which students CSV file to use')
+@click.option('-c', '--count', default=1, help='How many tasks to create')
+@click.option('-s', '--save', is_flag=True, help='Save it')
+@click.option('-cl', '--clear', is_flag=True, help='Clear stored Taks')
+def start(file, count, save, clear):
 
     if file is False:
       ctx = click.get_current_context()
       print(ctx.get_help())
       exit(-1)
 
-    if importoption is True:
-      userMgmt = UsermanagementAD()
-      userMgmt.Import(file)
-    elif exportoption is not None:
-      userMgmt = UsermanagementAD()
-      userMgmt.Export()
+    tasks = RandomCodingTasks(file, count, save, clear)
+    tasks.start()
 
 
 if __name__ == "__main__":
-    # load logging Config
-    configure_logging()
     start()

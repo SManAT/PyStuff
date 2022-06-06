@@ -2,8 +2,6 @@
 
 import os
 import pandas
-import logging
-
 from libs.User import User
 
 
@@ -24,20 +22,14 @@ class CSVTool():
 
     if os.path.exists(filename) is True:
       df = pandas.read_csv(filename)
-      # print first 5 rows
-      # print(df.head())
-      if self.debug:
-        print("Columns:")
-        print(df.columns.tolist())
-        print("\n")
 
       for index, row in df.iterrows():
         user = User()
         try:
-          user.setVorname(str(row['Vorname']))
-          user.setNachname(str(row['Nachname']))
-          user.setKlasse(str(row['Klasse']))
-          
+          user.setVorname(str(row['Vorname']).strip())
+          user.setNachname(str(row['Nachname']).strip())
+          user.setKlasse(str(row['Klasse']).strip())
+
           self.userList.append(user)
         except Exception as ex:
           self.logger.error("Parsing csv File Error, is the seperator , ?")

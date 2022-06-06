@@ -1,0 +1,1 @@
+python RandomCodingTasks.py -f Klasse.csv  -c 3 --clear
