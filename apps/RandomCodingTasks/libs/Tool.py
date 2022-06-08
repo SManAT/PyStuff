@@ -67,15 +67,19 @@ class Tool():
 
       # read old Data
       self.storedDict = self.dictTools.read(filename)
-      for key, data in self.storedDict.items():
-        try:
-          self.dict[key]['tasks'] = data['tasks']
-        except KeyError:
-          self.dict[key]['tasks'] = ''
+      if self.storedDict:
+        for key, data in self.storedDict.items():
+          try:
+            self.dict[key]['tasks'] = data['tasks']
+          except KeyError:
+            self.dict[key]['tasks'] = ''
 
       # create Random Tasks
       for key, data in self.dict.items():
-        usertasks = self.getTasks(data['tasks'])
+        try:
+          usertasks = self.getTasks(data['tasks'])
+        except:
+          usertasks = []
 
         for i in range(0, self.count):
           task = random.randint(1, overall)
