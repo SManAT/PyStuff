@@ -90,3 +90,6 @@ def websaveName(context):
     for item in table:
         context = context.replace(item[0], item[1])
     return context
+
+def copy(from, to):
+  shutil.copyfile(from, to)
