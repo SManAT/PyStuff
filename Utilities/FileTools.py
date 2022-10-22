@@ -91,5 +91,5 @@ def websaveName(context):
         context = context.replace(item[0], item[1])
     return context
 
-def copy(from, to):
-  shutil.copyfile(from, to)
+def copy(file, to):
+  shutil.copy(file, to)
