@@ -93,3 +93,25 @@ def websaveName(context):
 
 def copy(file, to):
   shutil.copy(file, to)
+
+def replacetext_in_File(filename, pattern, replace_text):
+        """
+        Search inside a file for pattern and replace it
+        :param filename: path to the file
+        :param pattern: search pattern
+        :param replace_text: replacement
+        """
+        try:
+            with open(filename, 'r+', encoding="UTF-8") as f:
+                file = f.read()
+                file = re.sub(pattern, replace_text, file, flags=re.IGNORECASE)
+                print(file)
+                # Setting the position to the top
+                # of the page to insert data
+                f.seek(0)
+                f.write(file)
+                # Truncating the file size
+                f.truncate()
+        except:
+            # not readable
+            pass
