@@ -154,6 +154,25 @@ def getGPU():
     print(tabulate(list_gpus, headers=("id", "name", "load", "free memory", "used memory", "total memory",
                                        "temperature", "uuid")))
 
+def getOS():
+  from sys import platform
+  if platform == "linux" or platform == "linux2":
+    print("linux")
+  elif platform == "darwin":
+    print("OS X")
+  elif platform == "win32":
+    print("Windows...")
+
+      
+def isWin(self):
+  if self.getOS() is "windows":
+    return True
+  return False
+
+def isLinux(self):
+  if self.getOS() is "linux":
+    return True
+  return False
 
 def main():
     getSystem()
@@ -162,6 +181,7 @@ def main():
     getDisk()
     getNetwork()
     getGPU()
+    getOS()
 
 
 if __name__ == "__main__":
