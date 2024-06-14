@@ -7,8 +7,8 @@ def open_dir_dialog(self):
 
 
 def centerWindows(self):
-    qr = self.frameGeometry()
-    cp = self.screen().availableGeometry().center()
-
-    qr.moveCenter(cp)
-    self.move(qr.topLeft())
+    """self = QMainWindow"""
+    center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
+    geo = self.frameGeometry()
+    geo.moveCenter(center)
+    self.move(geo.topLeft())
