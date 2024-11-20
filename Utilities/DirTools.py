@@ -14,6 +14,15 @@ class DirTools:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
+    def normalize(self, path):
+        """Note: This also normalizes the path separators according to the OS
+        On Windows: "C:\\Users\\Documents"
+        On Unix-like: "C:/Users/Documents"
+
+        Removes the trailing slash
+        """
+        return os.path.normpath(path)
+
     def pathEndingSlash(self, path):
         """check for ending slash at path"""
         if path.endswith(os.path.sep) is False:
