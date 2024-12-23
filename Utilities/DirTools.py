@@ -92,8 +92,11 @@ class DirTools:
 
     def createDir(self, path):
         """create dir if it not exists"""
-        if os.path.isdir(path) is False:
-            os.mkdir(path)
+        try:
+            os.makedirs(path, exist_ok=True)
+            # print(f"Successfully created path: {path}")
+        except Exception as e:
+            print(f"Error creating path: {str(e)}")
 
     def openFileManager(self, path):
         """cross OS"""
