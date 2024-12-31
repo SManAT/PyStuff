@@ -96,7 +96,7 @@ class DirTools:
             os.makedirs(path, exist_ok=True)
             # print(f"Successfully created path: {path}")
         except Exception as e:
-            print(f"Error creating path: {str(e)}")
+            print(f"Error creating path: {str(e)}") 
 
     def openFileManager(self, path):
         """cross OS"""
