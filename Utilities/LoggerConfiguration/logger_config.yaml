@@ -1,11 +1,12 @@
-version: 1 
+version: 1
 disable_existing_loggers: False
+
 formatters:
   simple:
     format: "%(asctime)s - [%(name)s:%(lineno)s] : %(message)s"
     datefmt: "%H:%M:%S"
   default:
-    format: "%(asctime)s] [%(levelname)s,%(funcName)s():%(lineno)s] %(message)s"
+    format: "%(asctime)s [%(levelname)s,%(funcName)s():%(lineno)s] %(message)s"
     datefmt: "%H:%M:%S"
 
 handlers:
@@ -19,19 +20,26 @@ handlers:
     class: logging.handlers.RotatingFileHandler
     level: INFO
     formatter: simple
-    filename: encryptMe.log
-    maxBytes: 1048576 # 1MB
+    filename: BookImagerQT.log
+    maxBytes: 1048576
     backupCount: 2
     encoding: utf8
 
-    
 loggers:
-  simpleExample:
+  # Your app logger – adjust the name you actually use in logging.getLogger(...)
+  bookimager:
     level: DEBUG
     handlers: [console, debug_file_handler]
     propagate: no
-    
+
+  # Silence PyQt6 debug chatter
+  PyQt6:
+    level: WARNING
+    propagate: yes
+  PyQt6.uic:
+    level: WARNING
+    propagate: yes
+
 root:
-  level: NOTSET
+  level: INFO
   handlers: [console, debug_file_handler]
-  propogate: yes
