@@ -1,14 +1,22 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""
+Usage:
+from src.config.LoggerConfiguration import configure_logging
 
-import os
-import yaml
-from pathlib import Path
+if __name__ == "__main__":
+    configure_logging()
+
+    logger = logging.getLogger('MainWindow')
+    logger.debug("Parsing csv File Error, is the seperator , ?")
+    logger.error("Parsing csv File Error, is the seperator , ?")
+"""
 
 import logging.config
+import os
+from pathlib import Path
 
-path_to_yml = "%s/%s" % (Path(__file__).parent.as_posix(),
-                         'logger_config.yaml')
+import yaml
+
+path_to_yml = "%s/%s" % (Path(__file__).parent.as_posix(), "logger_config.yaml")
 loggin_path = os.getcwd()
 
 
@@ -16,16 +24,15 @@ def load_yml():
     """
     Handle the yaml file an add the logging path to filenames
     """
-    with open(path_to_yml, 'rt') as f:
+    with open(path_to_yml, "rt") as f:
         yml_config = yaml.safe_load(f.read())
 
     # Dateiname mit Pfad anpassen
-    for item in yml_config['handlers']:
-        part = yml_config['handlers'][item]
-        if 'filename' in part:
-            filename = yml_config['handlers'][item]['filename']
-            yml_config['handlers'][item]['filename'] = '%s/%s' % (
-                loggin_path, filename)
+    for item in yml_config["handlers"]:
+        part = yml_config["handlers"][item]
+        if "filename" in part:
+            filename = yml_config["handlers"][item]["filename"]
+            yml_config["handlers"][item]["filename"] = "%s/%s" % (loggin_path, filename)
     return yml_config
 
 
