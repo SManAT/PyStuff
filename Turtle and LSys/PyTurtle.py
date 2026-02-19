@@ -4,6 +4,9 @@ Mag. Stefan Hagmann 2020
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons,
 PO Box 1866, Mountain View, CA 94042, USA.
+
+
+Attention: Python2 Syntax
 """
 from gturtle import *
 from tjaddons import makeRainbowColor
@@ -27,7 +30,7 @@ class PyTurtle:
         makeTurtle()
         setColor(makeColor(0x666666))
         setLineWidth(2)
-        print "Aufloesung %s x %s" % (self.width, self.height)
+        print"Aufloesung %s x %s" % (self.width, self.height)
 
         # SVG Punkte
         self.initPktArray(0, 0)
